@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using ProfileSample.DAL;
 using ProfileSample.Models;
@@ -15,27 +14,28 @@ namespace ProfileSample.Controllers
         {
             var context = new ProfileSampleEntities();
 
-            var sources = context.ImgSources.Take(20).Select(x => x.Id);
-            
+            var sources = context.ImgSources.Take(20);
+
             var model = new List<ImageModel>();
 
-            foreach (var id in sources)
+            foreach (var item in sources)
             {
-                var item = context.ImgSources.Find(id);
+                //var item = context.ImgSources.Find(id);
 
                 var obj = new ImageModel()
                 {
                     Name = item.Name,
-                    Data = item.Data
+                    Data = item.Data,
+                    Img = $"data:image/jpg;base64,{Convert.ToBase64String(item.Data)}"
                 };
 
                 model.Add(obj);
-            } 
+            }
 
             return View(model);
         }
 
-        public ActionResult Convert()
+        public ActionResult UploadImages()
         {
             var files = Directory.GetFiles(Server.MapPath("~/Content/Img"), "*.jpg");
 
@@ -64,6 +64,12 @@ namespace ProfileSample.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult About()
+        {
+            ViewBag.Message = "Some information";
+
+            return View();
+        }
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
