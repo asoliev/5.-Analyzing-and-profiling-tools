@@ -39,7 +39,6 @@ namespace GameOfLife
             UpdateGraphics();
         }
 
-
         public void Clear()
         {
             for (int i = 0; i < SizeX; i++)
